@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Jibé — Direction A · Éditoriale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --fg: #1a1a18;
+      --fg-soft: #3d3d38;
+      --fg-muted: #8a8578;
+      --bg: #f6f2eb;
+      --bg-warm: #efe9df;
+      --accent: #b5740a;
+      --accent-light: #d4960e;
+      --white: #fafaf7;
+      --rule: rgba(26,26,24,0.12);
+      --serif: 'Lora', Georgia, serif;
+      --sans: 'Instrument Sans', system-ui, sans-serif;
+      --max: 1080px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--fg);
+    }
+    .nav-right {
+      display: flex;
+      align-items: baseline;
+      gap: 2.5rem;
+    }
+    .nav-link {
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--fg); }
+    .nav-cta {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--accent);
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.7; }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3.5rem 2rem 2.5rem;
+    }
+    .hero-rule {
+      width: 100%;
+      height: 1px;
+      background: var(--rule);
+      margin-bottom: 2rem;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .hero-headline {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(2.6rem, 4.5vw, 3.8rem);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-right {
+      padding-top: 0.25rem;
+    }
+    .hero-intro {
+      font-family: var(--serif);
+      font-size: 1.08rem;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--fg-soft);
+      margin-bottom: 1.25rem;
+    }
+    .hero-body {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--fg-muted);
+      margin-bottom: 2rem;
+      max-width: 42ch;
+    }
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent);
+      transition: gap 0.2s var(--ease);
+    }
+    .hero-link:hover { gap: 0.85rem; }
+    .hero-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* ── PHOTO SECTION ── */
+    .photo-section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 1.5rem 2rem 4rem;
+    }
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 21/9;
+      background: var(--bg-warm);
+      border: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .photo-label {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--fg-muted);
+    }
+    .photo-caption {
+      position: absolute;
+      bottom: -2rem;
+      right: 0;
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+      font-style: italic;
+    }
+
+    /* ── DETAILS ── */
+    .details {
+      border-top: 1px solid var(--rule);
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3.5rem 2rem;
+    }
+    .details-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      margin-bottom: 2rem;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+    }
+    .detail-item {}
+    .detail-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--fg);
+    }
+    .detail-text {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--fg-muted);
+    }
+
+    /* ── STORY ── */
+    .story {
+      background: var(--fg);
+      color: var(--bg);
+      padding: 4.5rem 2rem;
+    }
+    .story-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.4fr 0.6fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .story-left {}
+    .story-tag {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 1.5rem;
+    }
+    .story-title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      line-height: 1.2;
+      font-weight: 500;
+      color: var(--bg);
+    }
+    .story-title em {
+      font-style: italic;
+      color: var(--accent-light);
+    }
+    .story-right {}
+    .story-text {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: rgba(246,242,235,0.75);
+      margin-bottom: 1.5rem;
+    }
+    .story-text strong {
+      color: var(--bg);
+      font-weight: 400;
+    }
+    .story-sig {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(246,242,235,0.1);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .sig-initials {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(246,242,235,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--accent-light);
+    }
+    .sig-name {
+      font-size: 0.85rem;
+      color: var(--bg);
+      font-weight: 500;
+    }
+    .sig-role {
+      font-size: 0.75rem;
+      color: rgba(246,242,235,0.45);
+      margin-top: 0.1rem;
+    }
+
+    /* ── SIGNUP ── */
+    .signup {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 4.5rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .signup-left {}
+    .signup-title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .signup-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .signup-body {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--fg-muted);
+      max-width: 38ch;
+    }
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-top: 0.25rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .form-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+    .form-input, .form-select {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      padding: 0.7rem 0;
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      border-radius: 0;
+    }
+    .form-input::placeholder { color: rgba(138,133,120,0.5); }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent);
+    }
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238A8578' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0 center;
+      background-color: transparent;
+      cursor: pointer;
+    }
+    .form-select option { background: var(--bg); }
+    .btn-submit {
+      align-self: flex-start;
+      margin-top: 1rem;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      padding: 0.8rem 2rem;
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.8; }
+    .form-note {
+      font-size: 0.72rem;
+      color: var(--fg-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--rule);
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .footer-left {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--fg-muted);
+    }
+    .footer-right {
+      display: flex;
+      gap: 2rem;
+    }
+    .footer-link {
+      font-size: 0.75rem;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--fg); }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s var(--ease) forwards;
+    }
+    .fade-in:nth-child(2) { animation-delay: 0.1s; }
+    .fade-in:nth-child(3) { animation-delay: 0.2s; }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: none; }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-grid,
+      .story-inner,
+      .signup,
+      .details-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero { padding: 4rem 1.5rem 3rem; }
+      .nav-right { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">Le Jibé</a>
+    <div class="nav-right">
+      <a href="#story" class="nav-link">L'histoire</a>
+      <a href="#details" class="nav-link">Le fauteuil</a>
+      <a href="#" class="nav-link">Journal</a>
+      <a href="#signup" class="nav-cta">S'inscrire</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-rule"></div>
+    <div class="hero-grid">
+      <div class="fade-in">
+        <h1 class="hero-headline">
+          Conçu par<br>
+          celui qui <em>en avait<br>besoin.</em>
+        </h1>
+      </div>
+      <div class="hero-right fade-in">
+        <p class="hero-intro">
+          Un fauteuil roulant électrique haute performance,
+          né dans un atelier de Dordogne.
+        </p>
+        <p class="hero-body">
+          Le Jibé n'est pas sorti d'un laboratoire. Il est le fruit de l'expérience quotidienne d'un ingénieur paraplégique qui a décidé de construire ce qui n'existait pas. Base gyroscopique, siège carbone sur mesure, 30&nbsp;km/h.
+        </p>
+        <a href="#signup" class="hero-link">
+          Manifester son intérêt
+          <svg viewBox="0 0 14 14"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="photo-section">
+    <div class="photo-frame">
+      <span class="photo-label">Photo du Jibé — à venir</span>
+      <span class="photo-caption">Dordogne, France</span>
+    </div>
+  </section>
+
+  <section class="details reveal" id="details">
+    <div class="details-label">Le fauteuil</div>
+    <div class="details-grid">
+      <div class="detail-item">
+        <h3 class="detail-title">Base gyroscopique</h3>
+        <p class="detail-text">Roues tout-terrain, stabilisation dynamique, jusqu'à 30&nbsp;km/h. Route, herbe, gravier — sans y penser.</p>
+      </div>
+      <div class="detail-item">
+        <h3 class="detail-title">Siège carbone sur mesure</h3>
+        <p class="detail-text">Imprimé sur les mesures exactes de chaque utilisateur. Léger, durable, confortable toute la journée.</p>
+      </div>
+      <div class="detail-item">
+        <h3 class="detail-title">Contrôle au joystick</h3>
+        <p class="detail-text">Avant, arrière, rotation complète sur place. Aussi agile dans un couloir que sur un chemin de campagne.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story" id="story">
+    <div class="story-inner">
+      <div class="story-left reveal">
+        <div class="story-tag">L'origine</div>
+        <h2 class="story-title">
+          Rien n'existait.<br>
+          Alors <em>il l'a<br>construit.</em>
+        </h2>
+      </div>
+      <div class="story-right reveal">
+        <p class="story-text">
+          Après des années avec des fauteuils classiques, <strong>JB — ingénieur et paraplégique</strong> — a pris un Segway, un siège en fibre de carbone et une manette de jeu, et a construit quelque chose qui a changé sa vie.
+        </p>
+        <p class="story-text">
+          Trente kilomètres heure sur la route. Un demi-tour sur place dans le couloir. De l'herbe, des graviers, du carrelage — sans jamais penser au fauteuil.
+        </p>
+        <p class="story-text">
+          Le Jibé n'est pas un produit médical.<br>
+          <strong>C'est un outil de liberté.</strong>
+        </p>
+        <div class="story-sig">
+          <div class="sig-initials">JB</div>
+          <div>
+            <div class="sig-name">Jean-Baptiste</div>
+            <div class="sig-role">Fondateur, ingénieur & premier utilisateur</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="signup" id="signup">
+    <div class="signup-left reveal">
+      <h2 class="signup-title">
+        Soyez parmi les<br><em>premiers informés.</em>
+      </h2>
+      <p class="signup-body">
+        La production démarre bientôt. Pas d'engagement, pas de spam — juste une notification le jour où Le Jibé sera disponible.
+      </p>
+    </div>
+    <div class="signup-form reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="fname">Prénom</label>
+          <input class="form-input" id="fname" type="text" placeholder="Jean" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" id="email" type="email" placeholder="jean@exemple.fr" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="role">Vous êtes…</label>
+        <select class="form-select" id="role">
+          <option value="" disabled selected>Choisissez votre profil</option>
+          <option>Utilisateur de fauteuil roulant</option>
+          <option>Aidant ou proche</option>
+          <option>Professionnel de santé</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <button type="button" class="btn-submit">Manifester son intérêt →</button>
+      <p class="form-note">Aucun engagement · Données stockées en UE</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">Le Jibé — Dordogne, 2025</div>
+    <div class="footer-right">
+      <a href="#" class="footer-link">Journal</a>
+      <a href="#" class="footer-link">Contact</a>
+      <a href="#" class="footer-link">Mentions légales</a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

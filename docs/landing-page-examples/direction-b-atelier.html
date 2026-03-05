@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Jibé — Direction B · Atelier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #111110;
+      --bg-raised: #191917;
+      --fg: #e8e4dc;
+      --fg-dim: #a8a49a;
+      --fg-faint: #6b675f;
+      --accent: #c8860e;
+      --accent-soft: rgba(200,134,14,0.15);
+      --rule: rgba(232,228,220,0.08);
+      --serif: 'Lora', Georgia, serif;
+      --sans: 'Instrument Sans', system-ui, sans-serif;
+      --max: 1100px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 2.5rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(17,17,16,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--fg);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo em { font-style: italic; color: var(--accent); }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+    .nav-link {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--fg-faint);
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--fg); }
+    .nav-cta {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.7; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 2.5rem 5rem;
+      position: relative;
+    }
+    /* subtle warm glow */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      right: 15%;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,134,14,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero-overline {
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeIn 0.6s 0.2s var(--ease) forwards;
+    }
+    .hero-headline {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(2.6rem, 4.5vw, 3.8rem);
+      line-height: 1.2;
+      color: var(--fg);
+      max-width: 20ch;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.35s var(--ease) forwards;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--rule);
+      opacity: 0;
+      animation: fadeIn 0.7s 0.6s var(--ease) forwards;
+    }
+    .hero-desc {
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: var(--fg-dim);
+      max-width: 48ch;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 3rem;
+      align-items: start;
+      justify-content: flex-end;
+    }
+    .meta-item {}
+    .meta-value {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      color: var(--fg);
+      line-height: 1;
+    }
+    .meta-value em {
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+    .meta-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-top: 0.4rem;
+    }
+
+    /* ── PHOTO BAND ── */
+    .photo-band {
+      padding: 0 2.5rem;
+      margin-bottom: 0;
+    }
+    .photo-band-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1px;
+    }
+    .photo-main {
+      aspect-ratio: 16/9;
+      background: var(--bg-raised);
+      border: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .photo-side {
+      aspect-ratio: auto;
+      background: var(--bg-raised);
+      border: 1px solid var(--rule);
+      border-left: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 2rem;
+    }
+    .photo-placeholder {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--fg-faint);
+    }
+    .photo-side-text {
+      font-size: 0.72rem;
+      color: var(--fg-faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 6rem 2.5rem;
+    }
+    .features-header {
+      display: grid;
+      grid-template-columns: 0.5fr 0.5fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+      align-items: end;
+    }
+    .features-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+    .features-title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--fg);
+    }
+    .features-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .features-intro {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--fg-dim);
+      max-width: 40ch;
+    }
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--rule);
+    }
+    .feature-item {
+      padding: 2.5rem 2rem 2.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+    }
+    .feature-item:not(:nth-child(3n+1)) {
+      padding-left: 2rem;
+    }
+    .feature-item:not(:nth-child(3n)) {
+      border-right: 1px solid var(--rule);
+    }
+    .feature-num {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .feature-name {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--fg);
+      margin-bottom: 0.6rem;
+    }
+    .feature-desc {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--fg-faint);
+    }
+
+    /* ── STORY ── */
+    .story {
+      background: var(--bg-raised);
+      padding: 6rem 2.5rem;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+    .story-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .story-text-col {}
+    .story-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 2rem;
+    }
+    .story-quote {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--fg);
+      margin-bottom: 2rem;
+      max-width: 32ch;
+    }
+    .story-body {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--fg-dim);
+      margin-bottom: 1.25rem;
+    }
+    .story-body strong {
+      color: var(--fg);
+      font-weight: 400;
+    }
+    .story-img-col {
+      position: relative;
+    }
+    .story-portrait {
+      aspect-ratio: 3/4;
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .portrait-label {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--fg-faint);
+    }
+    .story-attribution {
+      margin-top: 1.25rem;
+      font-size: 0.78rem;
+      color: var(--fg-faint);
+    }
+    .story-attribution strong {
+      color: var(--fg-dim);
+      font-weight: 500;
+    }
+
+    /* ── SIGNUP ── */
+    .signup {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 6rem 2.5rem;
+      text-align: center;
+    }
+    .signup-title {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+    .signup-title em { font-style: italic; color: var(--accent); }
+    .signup-sub {
+      font-size: 0.9rem;
+      color: var(--fg-dim);
+      margin-bottom: 3rem;
+      line-height: 1.7;
+    }
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: left;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .form-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+    .form-input, .form-select {
+      background: rgba(232,228,220,0.04);
+      border: 1px solid var(--rule);
+      padding: 0.8rem 1rem;
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      border-radius: 0;
+    }
+    .form-input::placeholder { color: var(--fg-faint); }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent);
+    }
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b675f' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-color: rgba(232,228,220,0.04);
+      cursor: pointer;
+    }
+    .form-select option { background: var(--bg-raised); color: var(--fg); }
+    .btn-submit {
+      align-self: center;
+      margin-top: 0.75rem;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      padding: 0.9rem 2.5rem;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { opacity: 0.85; transform: translateY(-1px); }
+    .form-note {
+      font-size: 0.7rem;
+      color: var(--fg-faint);
+      text-align: center;
+      margin-top: 0.25rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 2rem 2.5rem 3rem;
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 0.9rem;
+      color: var(--fg-faint);
+    }
+    .footer-logo em { font-style: italic; color: var(--accent); }
+    .footer-copy {
+      font-size: 0.7rem;
+      color: var(--fg-faint);
+    }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-link {
+      font-size: 0.72rem;
+      color: var(--fg-faint);
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--fg); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: none; }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-bottom,
+      .features-header,
+      .story-inner,
+      .photo-band-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .features-list { grid-template-columns: 1fr; }
+      .feature-item { border-right: none !important; padding-left: 0 !important; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-meta { justify-content: flex-start; }
+      nav { padding: 0 1.5rem; }
+      .hero { padding: 0 1.5rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">Le <em>Jibé</em></a>
+    <div class="nav-right">
+      <a href="#story" class="nav-link">L'histoire</a>
+      <a href="#features" class="nav-link">Le fauteuil</a>
+      <a href="#" class="nav-link">Journal</a>
+      <a href="#signup" class="nav-cta">S'inscrire</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-overline">Dordogne, France</p>
+      <h1 class="hero-headline">
+        Un fauteuil roulant construit par celui qui <em>en avait besoin.</em>
+      </h1>
+      <div class="hero-bottom">
+        <p class="hero-desc">
+          Le Jibé est un fauteuil électrique haute performance né dans un atelier, pas dans un laboratoire. Base gyroscopique, siège carbone moulé sur mesure, pilotage au joystick. Conçu par un ingénieur paraplégique pour son propre usage quotidien.
+        </p>
+        <div class="hero-meta">
+          <div class="meta-item">
+            <div class="meta-value">30 <em>km/h</em></div>
+            <div class="meta-label">Vitesse</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-value">360<em>°</em></div>
+            <div class="meta-label">Rotation</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-value">Sur <em>mesure</em></div>
+            <div class="meta-label">Siège carbone</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="photo-band">
+    <div class="photo-band-inner">
+      <div class="photo-main">
+        <span class="photo-placeholder">Photo du Jibé — à venir</span>
+      </div>
+      <div class="photo-side">
+        <span class="photo-placeholder">Détail</span>
+        <span class="photo-side-text">Atelier · Dordogne</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="features reveal" id="features">
+    <div class="features-header">
+      <div>
+        <div class="features-tag">Le fauteuil</div>
+        <h2 class="features-title">Pensé pour <em>la vraie vie.</em></h2>
+      </div>
+      <p class="features-intro">
+        Pas un compromis entre mobilité et confort. Le Jibé fait les deux — parce qu'un utilisateur réel a décidé de ne plus choisir.
+      </p>
+    </div>
+    <div class="features-list">
+      <div class="feature-item">
+        <div class="feature-num">01</div>
+        <h3 class="feature-name">Base gyroscopique</h3>
+        <p class="feature-desc">Grandes roues tout-terrain, stabilisation dynamique. Stable sur route, herbe et pavés. Jusqu'à 30 km/h.</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-num">02</div>
+        <h3 class="feature-name">Siège carbone</h3>
+        <p class="feature-desc">Moulé aux mesures exactes de chaque utilisateur. Léger, robuste, confortable sur toute la journée.</p>
+      </div>
+      <div class="feature-item">
+        <div class="feature-num">03</div>
+        <h3 class="feature-name">Pilotage joystick</h3>
+        <p class="feature-desc">Avant, arrière, rotation complète. Manœuvrable dans un couloir comme sur un chemin de campagne.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story reveal" id="story">
+    <div class="story-inner">
+      <div class="story-text-col">
+        <div class="story-tag">L'histoire</div>
+        <blockquote class="story-quote">
+          « Rien n'existait. Alors je l'ai construit. »
+        </blockquote>
+        <p class="story-body">
+          Après des années avec des fauteuils classiques, <strong>JB — ingénieur et paraplégique</strong> — a pris un Segway, un siège en fibre de carbone et une manette de jeu, et a construit quelque chose qui a changé sa vie.
+        </p>
+        <p class="story-body">
+          Trente kilomètres heure sur la route. Un demi-tour sur place dans le couloir. De l'herbe, des graviers, du carrelage — sans jamais penser au fauteuil.
+        </p>
+        <p class="story-body">
+          Le Jibé n'est pas un produit médical. <strong>C'est un outil de liberté.</strong>
+        </p>
+      </div>
+      <div class="story-img-col">
+        <div class="story-portrait">
+          <span class="portrait-label">Portrait de JB — à venir</span>
+        </div>
+        <p class="story-attribution">
+          <strong>Jean-Baptiste</strong> — Fondateur, ingénieur & premier utilisateur
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="signup reveal" id="signup">
+    <h2 class="signup-title">Soyez parmi les <em>premiers informés.</em></h2>
+    <p class="signup-sub">
+      La production démarre bientôt. Pas d'engagement, pas de spam — juste une notification le jour où Le Jibé sera disponible.
+    </p>
+    <div class="signup-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="fname">Prénom</label>
+          <input class="form-input" id="fname" type="text" placeholder="Jean" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" id="email" type="email" placeholder="jean@exemple.fr" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="role">Vous êtes…</label>
+        <select class="form-select" id="role">
+          <option value="" disabled selected>Choisissez votre profil</option>
+          <option>Utilisateur de fauteuil roulant</option>
+          <option>Aidant ou proche</option>
+          <option>Professionnel de santé</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <button type="button" class="btn-submit">Manifester son intérêt →</button>
+      <p class="form-note">Aucun engagement · Données stockées en UE</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Le <em>Jibé</em></div>
+    <div class="footer-copy">© 2025 — Dordogne, France</div>
+    <div class="footer-links">
+      <a href="#" class="footer-link">Journal</a>
+      <a href="#" class="footer-link">Contact</a>
+      <a href="#" class="footer-link">Mentions légales</a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
