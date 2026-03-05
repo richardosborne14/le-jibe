@@ -1,0 +1,150 @@
+# Claude Rules
+
+Rules and conventions for Cline working on the Le Jibé project.  
+Read this at the start of every session.
+
+---
+
+## Architecture Rules (non-negotiable)
+
+1. **All API logic lives in FastAPI.** SvelteKit never has server-side route handlers that touch the database or business logic. SvelteKit only calls `/api/*` endpoints.
+
+2. **All services run in Docker.** Never run postgres, the backend, or anything else directly on the host. `docker compose up -d` is the only way.
+
+3. **Database changes go through Alembic.** Never edit the database schema directly. Always create a migration: `docker compose exec backend alembic revision --autogenerate -m "description"` then `docker compose exec backend alembic upgrade head`.
+
+4. **Environment variables via `.env`.** No secrets in code. No hardcoded URLs. Use the pattern in `.env.example`.
+
+5. **SvelteKit routes call `/api/*` only.** Backend base URL comes from `PUBLIC_API_URL` env var, defaulting to `/api` (same-origin via nginx in production).
+
+---
+
+## Code Standards
+
+### Python / FastAPI
+- Type hints on all function signatures
+- Pydantic schemas for all request and response bodies
+- SQLAlchemy models in `app/models/`, schemas in `app/schemas/`
+- Route handlers in `app/api/` — one file per resource (e.g. `signups.py`, `posts.py`)
+- No business logic in route handlers — extract to service functions if complex
+- Explicit error handling: raise `HTTPException` with meaningful status codes and messages
+- Comment non-obvious logic; docstring on every function
+
+### SvelteKit / JavaScript
+- TypeScript throughout
+- Fetch calls in `+page.svelte` or a `$lib/api.ts` helper — never inline
+- Loading and error states for every API call — never leave the user hanging
+- CSS variables from the design token set (see README) — no hardcoded colours
+- Components in `src/lib/components/`, one component per file
+- Svelte stores for shared state only — keep it minimal
+
+### General
+- Every PR / task should leave the codebase in a working state
+- No commented-out dead code committed
+- No `console.log` left in production paths
+
+---
+
+## Design Tokens (enforce in all frontend work)
+
+```css
+--ink:          #0D0D0B;
+--ink-soft:     #1A1A17;
+--paper:        #F5F0E8;
+--paper-dim:    #E8E2D6;
+--amber:        #D4860A;
+--amber-bright: #F0A020;
+--amber-pale:   #F5C96A;
+--white:        #FAFAF8;
+--muted:        #8A8578;
+
+--f-display: 'Syne', sans-serif;
+--f-body:    'Instrument Sans', sans-serif;
+--f-serif:   'Instrument Serif', serif;
+```
+
+The approved visual reference is `docs/lejibe-landing.html`. Match it.
+
+---
+
+## Deployment
+
+**Production is a single Hetzner VPS.**
+
+```bash
+# Deploy
+ssh deploy@<HETZNER_IP>
+cd /opt/lejibe
+git pull
+docker compose up -d --build
+
+# View logs
+docker compose logs -f backend
+docker compose logs -f frontend
+
+# Run a migration in production
+docker compose exec backend alembic upgrade head
+
+# Restart a single service
+docker compose restart backend
+```
+
+SSL is managed by certbot. Do not touch nginx SSL config unless specifically tasked to.
+
+---
+
+## Confidence Scoring
+
+After completing each task, provide a confidence score:
+
+- **9–10:** Done, tested, no known issues
+- **8:** Done and tested, minor uncertainties noted
+- **7:** Done but needs human verification before depending on it
+- **Below 7:** Do not mark complete — raise blockers first
+
+**Minimum to proceed:** 8/10. If below 8, explain what's missing and ask.
+
+---
+
+## When to Stop and Ask
+
+Always pause and ask before:
+
+- Making schema changes not described in the task
+- Changing the docker-compose structure
+- Touching nginx or SSL config (unless the task is explicitly about that)
+- Deleting data or dropping tables
+- Adding a new dependency (Python or npm) — confirm it's appropriate first
+- Any task where confidence would be below 7/10
+
+**How to ask:**
+
+```
+## Need Clarification
+
+I'm working on Task X.X and I've hit an ambiguity:
+
+[Describe the situation clearly]
+
+Options I see:
+A) [Option with trade-offs]
+B) [Option with trade-offs]
+
+My preference: A, because [reason].
+
+Confidence if I proceed with A: 7/10. Please confirm.
+```
+
+---
+
+## What Not to Build (Phase 1)
+
+Don't implement these even if they seem like natural additions:
+
+- User authentication / accounts (admin uses a static token for now)
+- Email sending (signups just go to DB — JB exports CSV manually)
+- Payment integration
+- Image upload
+- Anything not in the current phase of ROADMAP.md
+
+If something seems missing and might be needed, note it in `LEARNINGS.md` under "Deferred Ideas" and move on.

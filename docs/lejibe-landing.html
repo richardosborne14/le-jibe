@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Jibé — Liberté de mouvement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ───────────────────────────────────────────────── */
+    :root {
+      --ink:        #0D0D0B;
+      --ink-soft:   #1A1A17;
+      --paper:      #F5F0E8;
+      --paper-dim:  #E8E2D6;
+      --amber:      #D4860A;
+      --amber-bright:#F0A020;
+      --amber-pale: #F5C96A;
+      --white:      #FAFAF8;
+      --muted:      #8A8578;
+      --border:     rgba(212,134,10,0.25);
+
+      --f-display: 'Syne', sans-serif;
+      --f-body:    'Instrument Sans', sans-serif;
+      --f-serif:   'Instrument Serif', serif;
+
+      --max: 1160px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ─── RESET ────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--f-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── NOISE OVERLAY ────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ─── NAV ──────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(13,13,11,0.95) 0%, rgba(13,13,11,0) 100%);
+      backdrop-filter: blur(0px);
+    }
+    .nav-logo {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-logo span {
+      color: var(--amber-bright);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-link {
+      font-family: var(--f-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--paper); }
+    .btn-nav {
+      font-family: var(--f-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.25rem;
+      border: 1px solid var(--amber);
+      color: var(--amber-bright);
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s;
+      cursor: pointer;
+      background: transparent;
+    }
+    .btn-nav:hover {
+      background: var(--amber);
+      color: var(--ink);
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background gradient atmosphere */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(212,134,10,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(212,134,10,0.06) 0%, transparent 50%),
+        var(--ink);
+    }
+    /* Diagonal line accent */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 20%;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 0%, var(--border) 30%, var(--border) 70%, transparent 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: var(--max);
+      margin: 0 auto;
+      width: 100%;
+      padding: 9rem 2rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--f-body);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber-bright);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .hero-headline {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .hero-headline em {
+      font-style: italic;
+      font-family: var(--f-serif);
+      font-weight: 400;
+      color: var(--amber-pale);
+    }
+
+    .hero-sub {
+      font-family: var(--f-body);
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--paper-dim);
+      max-width: 42ch;
+      margin-top: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .btn-primary {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      background: var(--amber);
+      color: var(--ink);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--amber-bright);
+      transform: translateY(-1px);
+    }
+    .cta-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    /* Hero stats strip */
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(245,240,232,0.08);
+    }
+    .stat { }
+    .stat-value {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--white);
+      line-height: 1;
+    }
+    .stat-value span {
+      font-size: 1rem;
+      color: var(--amber);
+      font-weight: 600;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    /* Hero right — video */
+    .hero-video-col {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--ink-soft);
+      border: 1px solid rgba(212,134,10,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    /* Simulated video thumbnail */
+    .video-frame-inner {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(212,134,10,0.08) 0%, transparent 50%),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 40px,
+          rgba(212,134,10,0.02) 40px,
+          rgba(212,134,10,0.02) 41px
+        ),
+        var(--ink-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-play {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(212,134,10,0.15);
+      border: 2px solid var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .video-frame:hover .video-play {
+      background: rgba(212,134,10,0.3);
+      transform: scale(1.05);
+    }
+    .video-play svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--amber-bright);
+      margin-left: 3px;
+    }
+    .video-label {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+    }
+    .video-caption {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ─── SCROLLING TICKER ─────────────────────────────────────── */
+    .ticker {
+      border-top: 1px solid rgba(245,240,232,0.07);
+      border-bottom: 1px solid rgba(245,240,232,0.07);
+      padding: 0.9rem 0;
+      overflow: hidden;
+      position: relative;
+      background: var(--ink-soft);
+    }
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      white-space: nowrap;
+      animation: ticker 30s linear infinite;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 2.5rem;
+      font-family: var(--f-display);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .ticker-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--amber);
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── SECTION SHARED ───────────────────────────────────────── */
+    section {
+      padding: 7rem 2rem;
+    }
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+    .section-tag {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 1.5rem;
+      height: 1px;
+      background: var(--amber);
+    }
+    .section-title {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .section-title em {
+      font-style: italic;
+      font-family: var(--f-serif);
+      font-weight: 400;
+      color: var(--amber-pale);
+    }
+
+    /* ─── STORY SECTION ────────────────────────────────────────── */
+    .story {
+      background: var(--ink-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .story::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .story-image-col {
+      position: relative;
+    }
+    .story-img-placeholder {
+      aspect-ratio: 3/4;
+      background: var(--ink);
+      border: 1px solid rgba(245,240,232,0.08);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .story-img-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 50% 60%, rgba(212,134,10,0.1) 0%, transparent 70%);
+    }
+    .img-label {
+      font-family: var(--f-display);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+    .story-tag-vertical {
+      position: absolute;
+      right: -1.5rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(212,134,10,0.4);
+      font-family: var(--f-display);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .story-text .section-title {
+      margin-bottom: 2rem;
+    }
+    .story-body {
+      font-family: var(--f-serif);
+      font-size: 1.15rem;
+      line-height: 1.75;
+      color: var(--paper-dim);
+      margin-bottom: 1.5rem;
+    }
+    .story-body strong {
+      color: var(--white);
+      font-weight: 400;
+    }
+    .story-signature {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(245,240,232,0.08);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .sig-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--ink);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--amber);
+    }
+    .sig-text {}
+    .sig-name {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--white);
+    }
+    .sig-role {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-top: 0.1rem;
+    }
+
+    /* ─── FEATURES ─────────────────────────────────────────────── */
+    .features {
+      position: relative;
+    }
+    .features-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 5rem;
+      align-items: end;
+    }
+    .features-intro {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 40ch;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(245,240,232,0.06);
+      border: 1px solid rgba(245,240,232,0.06);
+    }
+    .feature-card {
+      background: var(--ink);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: background 0.25s;
+    }
+    .feature-card:hover {
+      background: var(--ink-soft);
+    }
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 2rem; right: 2rem;
+      height: 1px;
+      background: linear-gradient(to right, var(--amber), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .feature-card:hover::after { opacity: 1; }
+    .feature-num {
+      font-family: var(--f-display);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--amber);
+      margin-bottom: 1.5rem;
+    }
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 1.25rem;
+      color: var(--amber);
+    }
+    .feature-title {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .feature-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ─── SIGNUP ───────────────────────────────────────────────── */
+    .signup {
+      background: var(--ink-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .signup::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 70% at 50% 100%, rgba(212,134,10,0.08) 0%, transparent 60%);
+    }
+    .signup-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .signup .section-tag {
+      justify-content: center;
+    }
+    .signup .section-tag::before { display: none; }
+    .signup .section-title {
+      margin-bottom: 1rem;
+    }
+    .signup-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      line-height: 1.7;
+    }
+
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+    }
+    .form-input, .form-select {
+      background: rgba(245,240,232,0.04);
+      border: 1px solid rgba(245,240,232,0.12);
+      border-radius: 2px;
+      padding: 0.85rem 1rem;
+      color: var(--paper);
+      font-family: var(--f-body);
+      font-size: 0.9rem;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+      width: 100%;
+    }
+    .form-input::placeholder { color: rgba(138,133,120,0.6); }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--amber);
+      background: rgba(212,134,10,0.04);
+    }
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238A8578' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-color: rgba(245,240,232,0.04);
+      cursor: pointer;
+    }
+    .form-select option { background: var(--ink-soft); color: var(--paper); }
+    .btn-submit {
+      font-family: var(--f-display);
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 1.1rem 2.5rem;
+      background: var(--amber);
+      color: var(--ink);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      align-self: center;
+      margin-top: 0.5rem;
+    }
+    .btn-submit:hover {
+      background: var(--amber-bright);
+      transform: translateY(-1px);
+    }
+    .form-note {
+      font-size: 0.72rem;
+      color: rgba(138,133,120,0.7);
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(245,240,232,0.06);
+    }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: var(--f-display);
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--amber); }
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-link {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--paper); }
+
+    /* ─── SCROLL REVEAL ────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── PAGE LOAD ANIMATION ──────────────────────────────────── */
+    .hero-left > * {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s var(--ease) forwards;
+    }
+    .hero-eyebrow   { animation-delay: 0.1s; }
+    .hero-headline  { animation-delay: 0.25s; }
+    .hero-sub       { animation-delay: 0.4s; }
+    .hero-cta-group { animation-delay: 0.55s; }
+    .hero-stats     { animation-delay: 0.7s; }
+    .hero-video-col {
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s var(--ease) forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ────────────────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="nav-logo">Le <span>Jibé</span></a>
+    <div class="nav-actions">
+      <a href="#story" class="nav-link">L'histoire</a>
+      <a href="#features" class="nav-link">Le fauteuil</a>
+      <a href="#signup" class="nav-link">Blog</a>
+      <a href="#signup" class="btn-nav">Manifester son intérêt</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ───────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <!-- Left: copy -->
+      <div class="hero-left">
+        <p class="hero-eyebrow">Dordogne, France — Conçu par un utilisateur</p>
+        <h1 class="hero-headline">
+          Liberté<br>
+          <em>sans</em><br>
+          compromis.
+        </h1>
+        <p class="hero-sub">
+          Le Jibé est un fauteuil roulant électrique haute performance conçu de l'intérieur. Pas par un laboratoire. Par quelqu'un qui en avait besoin.
+        </p>
+        <div class="hero-cta-group">
+          <a href="#signup" class="btn-primary">Manifester son intérêt</a>
+          <span class="cta-note">Aucun engagement — premiers informés à la sortie</span>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-value">30<span>km/h</span></div>
+            <div class="stat-label">Vitesse de pointe</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">360<span>°</span></div>
+            <div class="stat-label">Rotation sur place</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">All<span>-terrain</span></div>
+            <div class="stat-label">Route · jardin · intérieur</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: video -->
+      <div class="hero-video-col">
+        <div class="video-frame">
+          <div class="video-frame-inner">
+            <div class="video-play">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="video-label">Vidéo de démonstration</div>
+        </div>
+        <p class="video-caption">JB traversant routes, jardins et couloirs — au quotidien.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TICKER ──────────────────────────────────────────────────── -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <!-- repeated twice for infinite scroll illusion -->
+      <span class="ticker-item">Conçu par un utilisateur <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Siège carbone sur mesure <span class="ticker-dot"></span></span>
+      <span class="ticker-item">30 km/h sur route <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Rotation 360° <span class="ticker-dot"></span></span>
+      <span class="ticker-item">All-terrain <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Fabriqué en France <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Production artisanale <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Conçu par un utilisateur <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Siège carbone sur mesure <span class="ticker-dot"></span></span>
+      <span class="ticker-item">30 km/h sur route <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Rotation 360° <span class="ticker-dot"></span></span>
+      <span class="ticker-item">All-terrain <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Fabriqué en France <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Production artisanale <span class="ticker-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- ── STORY ───────────────────────────────────────────────────── -->
+  <section class="story" id="story">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-image-col">
+          <div class="story-img-placeholder">
+            <div>
+              <div class="img-label">Photo de JB<br>à venir</div>
+            </div>
+          </div>
+          <div class="story-tag-vertical">Le Jibé — Dordogne</div>
+        </div>
+        <div class="story-text reveal">
+          <p class="section-tag">L'origine</p>
+          <h2 class="section-title">Je l'ai construit<br>parce que <em>rien<br>d'autre ne marchait.</em></h2>
+          <p class="story-body">
+            Après des années avec des fauteuils classiques, <strong>JB — ingénieur et paraplégiqueik — a pris un Segway, un siège en fibre de carbone et une manette de jeu</strong>, et a construit quelque chose qui a changé sa vie.
+          </p>
+          <p class="story-body">
+            Trente kilomètres heure sur la route. Un demi-tour sur place dans le couloir. De l'herbe, des graviers, du carrelage — sans penser à rien d'autre que la destination.
+          </p>
+          <p class="story-body">
+            Le Jibé n'est pas un produit médical. <strong>C'est un outil de liberté.</strong> Conçu de l'intérieur, par quelqu'un qui sait exactement ce dont un utilisateur a besoin.
+          </p>
+          <div class="story-signature">
+            <div class="sig-avatar">JB</div>
+            <div class="sig-text">
+              <div class="sig-name">Jean-Baptiste</div>
+              <div class="sig-role">Fondateur, ingénieur & premier utilisateur — Dordogne, France</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ────────────────────────────────────────────────── -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header reveal">
+        <div>
+          <p class="section-tag">Le fauteuil</p>
+          <h2 class="section-title">Engineeré pour<br><em>la vraie vie.</em></h2>
+        </div>
+        <p class="features-intro">
+          Pas un compromis entre mobilité et confort. Pas une concession entre l'intérieur et l'extérieur. Le Jibé fait les deux — parce qu'un utilisateur réel en avait besoin.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Card 1 -->
+        <div class="feature-card reveal">
+          <div class="feature-num">01</div>
+          <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="20" cy="20" r="10"/>
+            <path d="M20 4v4M20 32v4M4 20h4M32 20h4M7.75 7.75l2.83 2.83M29.42 29.42l2.83 2.83M7.75 32.25l2.83-2.83M29.42 10.58l2.83-2.83"/>
+          </svg>
+          <h3 class="feature-title">Base Segway modifiée</h3>
+          <p class="feature-desc">Grands roues tout-terrain, gyroscopique, jusqu'à 30 km/h. Stable sur route, herbe, et pavés. Fabrication en série via un partenariat industriel en Asie.</p>
+        </div>
+        <!-- Card 2 -->
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-num">02</div>
+          <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 6c-7.7 0-14 6.3-14 14s6.3 14 14 14 14-6.3 14-14S27.7 6 20 6z"/>
+            <path d="M20 14v6l4 4"/>
+          </svg>
+          <h3 class="feature-title">Siège carbone sur mesure</h3>
+          <p class="feature-desc">Imprimé en 3D sur les mesures exactes de chaque utilisateur. Léger, robuste, confortable sur toute la journée — pas un compromis médical standard.</p>
+        </div>
+        <!-- Card 3 -->
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-num">03</div>
+          <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M8 20h24M20 8l12 12-12 12"/>
+          </svg>
+          <h3 class="feature-title">Joystick & rotation complète</h3>
+          <p class="feature-desc">Avant, arrière, et rotation sur place à 360°. Manœuvrable dans les couloirs les plus étroits comme sur la route nationale. Contrôle naturel en quelques minutes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SIGNUP ──────────────────────────────────────────────────── -->
+  <section class="signup" id="signup">
+    <div class="signup-inner reveal">
+      <p class="section-tag">Pré-lancement</p>
+      <h2 class="section-title">Soyez parmi<br>les <em>premiers informés.</em></h2>
+      <p class="signup-sub">
+        La production démarre bientôt. Inscrivez votre intérêt — pas d'engagement, pas de spam. Juste une notification quand Le Jibé sera disponible à la commande.
+      </p>
+
+      <form class="signup-form" onsubmit="return false;">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="fname">Prénom</label>
+            <input class="form-input" id="fname" type="text" placeholder="Jean" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" id="email" type="email" placeholder="jean@exemple.fr" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="role">Vous êtes…</label>
+          <select class="form-select" id="role">
+            <option value="" disabled selected>Choisissez votre profil</option>
+            <option>Utilisateur de fauteuil roulant</option>
+            <option>Aidant ou proche d'un utilisateur</option>
+            <option>Professionnel de santé / ergothérapeute</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-submit">Manifester son intérêt →</button>
+        <p class="form-note">Aucun engagement. Désinscription possible à tout moment. Données stockées en UE.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Le <span>Jibé</span></div>
+      <div class="footer-copy">© 2025 Le Jibé — Dordogne, France</div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Blog</a>
+        <a href="#" class="footer-link">Contact</a>
+        <a href="#" class="footer-link">Mentions légales</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── SCROLL REVEAL SCRIPT ────────────────────────────────────── -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
