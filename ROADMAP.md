@@ -6,12 +6,12 @@
 
 ---
 
-### Task 1: Infrastructure & Repo Setup
-- [ ] 1.1 — Initialise monorepo structure (frontend/, backend/, nginx/, docker-compose.yml, .env.example)
-- [ ] 1.2 — Write base docker-compose.yml (postgres, backend, frontend, nginx services)
-- [ ] 1.3 — Configure nginx for local dev reverse proxy (frontend on /*, backend on /api/*)
-- [ ] 1.4 — Hetzner VPS provisioning (Ubuntu 24, Docker, Docker Compose, SSH key)
-- [ ] 1.5 — Production nginx config + Let's Encrypt SSL for lejibe.fr
+### Task 1: Infrastructure & Repo Setup ✅
+- [x] 1.1 — Initialise monorepo structure (frontend/, backend/, nginx/, docker-compose.yml, .env.example)
+- [x] 1.2 — Write base docker-compose.yml (postgres, backend, frontend, nginx services)
+- [x] 1.3 — Configure nginx for local dev reverse proxy (frontend on /*, backend on /api/*)
+- [x] 1.4 — Hetzner VPS provisioning (Ubuntu 24, Docker, Docker Compose, SSH key)
+- [x] 1.5 — Production nginx config + Let's Encrypt SSL for le-jibe.com
 
 ### Task 2: Database & Backend Foundation
 - [ ] 2.1 — FastAPI project scaffold (app structure, config, DB session, health endpoint)
