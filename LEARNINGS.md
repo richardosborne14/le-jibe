@@ -1,50 +1,71 @@
 # Learnings
 
-Running log of decisions, solutions, and gotchas discovered during development.  
-Add entries as you go — this is read at the start of sessions to avoid re-solving known problems.
-
-Format: newest entries at the top.
+Running log of solutions, decisions, and gotchas. Check this at the start of each task.
 
 ---
 
-## Deferred Ideas
+## 2026-03: Product pivot — complete device, not detachable base
 
-Things that came up during implementation but deliberately not built yet:
+**Context:** Le Jibé was originally conceived as a detachable motorised base that attaches to existing wheelchair frames (e.g. TraceS). After JB's analysis of the market and user feedback, the product is now a **complete standalone mobility device**.
 
-| Idea | Context | Revisit in |
-|---|---|---|
-| Email confirmation on signup | Would be nice UX but needs SMTP setup | Phase 2 |
-| CSV export in admin | Currently manual from DB | Phase 2 |
+**Why:** The TraceS frame has deal-breaker limitations for a large portion of the target market:
+- Sloped seat sides prevent slide-transfer for many paraplegic users
+- Combined weight (TraceS + Jibé base) too heavy for solo car loading
+- Committing to TraceS means 5 years locked in (reimbursement cycle) if unsatisfied
+- TraceS itself costs €7,000+ before adding the Jibé
 
----
+**New model:** JB buys the Segway base, builds the steel frame, 3D-prints a carbon fibre seat custom-fitted to each user's body dimensions. User transfers their own cushion. €9,800 delivered.
 
-## Architecture Decisions
-
-### 2025: Single-server deployment on Hetzner
-One VPS hosts all services via Docker Compose. Deliberate choice: simpler, cheaper, under JB's control, EU-hosted. Not using Vercel/Netlify for frontend despite trade-offs (no CDN, no preview deployments). Revisit if traffic becomes a problem — at that point, split services is trivial with this architecture.
-
-### 2025: Static admin token (no user auth)
-Admin panel uses a single token from the environment variable `ADMIN_TOKEN`. No user accounts, no sessions. Simple and sufficient for a single-person operation. Will need proper auth before any second person needs admin access.
-
-### 2025: Markdown for blog posts (stored as raw MD in DB)
-Blog posts are stored as raw Markdown in the database and rendered client-side. Simple to write, easy to edit. No CMS required at this scale. If the blog becomes more active, consider a lightweight editor in the admin panel.
+**Apply to:** All product descriptions, landing page copy, feature explanations, chat widget knowledge base.
 
 ---
 
-## Gotchas & Solutions
+## 2026-03: No regulatory track — private use only
 
-### SvelteKit vite.config.ts fails with "ESM only" error in Docker
-**Problem:** Frontend container crashed with `Failed to resolve "@sveltejs/kit/vite". This package is ESM only but it was tried to load by require.`  
-**Solution:** Add `"type": "module"` to `frontend/package.json`. SvelteKit requires the project to be treated as ES modules.  
-**Date:** 2026-03-05
+**Context:** The 30+ km/h speed and lack of medical device certification mean Le Jibé cannot be legally used on public roads in France. The standard industry approach for similar devices is to sell with a private-use disclaimer.
 
-### Host port conflicts in dev (multiple projects running)
-**Problem:** `vh-command-centre` project was already using port 8000 on the host, causing `docker compose up` to fail with "port already allocated".  
-**Solution:** Changed backend host port mapping in `docker-compose.yml` to `8002:8000`. Internal Docker networking is unaffected (nginx → backend:8000 still works). In production on Hetzner, the full 8000 port is available.  
-**Note:** The README shows `localhost:8000` as the canonical backend address — on a clean machine this is correct. On this dev machine use `localhost:8002`.  
-**Date:** 2026-03-05
+**Decision:** No CERAH outreach. No LPPR registration. No reimbursement pathway. Direct-to-customer only.
 
-### Hetzner cx22 deprecated
-**Problem:** `cx22` server type was deprecated and rejected by the Hetzner API with `"server type 104 is deprecated"`.  
-**Solution:** Use `cx23` — identical spec (2 vCPU, 4GB RAM, 40GB SSD), slightly cheaper at €2.99/mo.  
-**Date:** 2026-03-05
+**Apply to:** All public-facing copy must avoid speed figures, road-use implications, and medical device language. Checkout disclaimer: "Destiné à un usage privé, non homologué pour la voie publique."
+
+---
+
+## 2026-03: Landing page font — Syne replaced by Outfit
+
+**Context:** JB approved the first dark template (lejibe-landing.html) but found Syne (display font) too unusual. Directions A and B (Éditoriale and Atelier) were rejected — the original dark template is the one to implement.
+
+**Decision:** Swap Syne → Outfit (geometric, clean, legible, Google Fonts). Keep Instrument Sans (body) and Instrument Serif (accent italic).
+
+**Apply to:** All frontend work, design tokens, CSS variables.
+
+---
+
+## 2026-03: Reimbursement landscape post-Dec 2025 reform
+
+**Context:** The December 2025 Sécurité Sociale reform has caused widespread reimbursement refusals across JB's network. Appeals with corrected line-by-line nomenclature pricing are the recommended approach.
+
+**Relevance to Jibé:** This validates the direct-to-customer model. Users can't rely on the state for anything beyond basic classic wheelchairs. Le Jibé's pitch is: "use your reimbursement for your classic chair, buy Le Jibé separately."
+
+**Apply to:** Pricing section copy, chat widget responses about cost/reimbursement, marketing messaging.
+
+---
+
+## 2026-03: RGPD health data — separate storage, explicit consent
+
+**Context:** Disability profile data is "données sensibles" under Article 9 GDPR. Requires explicit, informed, specific consent — not just a checkbox.
+
+**Decision:** Separate `user_profiles` table, linked by FK to signups. Consent timestamp required before any write. Anonymous chat mode available. Right to erasure implemented.
+
+**Apply to:** All backend work involving profile data, chat widget consent flow, admin data views.
+
+---
+
+## Quick Reference
+
+| Issue | Solution | Entry |
+|-------|----------|-------|
+| Product framing | Complete device, not add-on | 2026-03 pivot |
+| Speed mentions | Never — use "fluide", "réactif" | 2026-03 regulatory |
+| Display font | Outfit (replaced Syne) | 2026-03 font |
+| Health data storage | Separate table, explicit consent | 2026-03 RGPD |
+| Reimbursement messaging | "Keep your classic chair, buy Jibé separately" | 2026-03 reimbursement |
